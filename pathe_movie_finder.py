@@ -74,6 +74,9 @@ def print_movies(url, api_key):
     
     # Add the scores as a new column to the cleansed DataFrame
     df_cleansed['Score'] = movie_scores
+    df_cleansed['Score'] = df_cleansed['Score'].round(1)
+    # Sort the DataFrame by the 'Score' column in ascending order
+    df_cleansed = df_cleansed.sort_values('Score', ascending=False)
     print(df_cleansed)
 
 if __name__ == "__main__":
