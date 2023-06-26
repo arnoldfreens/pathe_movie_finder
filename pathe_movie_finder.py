@@ -94,7 +94,7 @@ def main(url):
     df_scored = find_score(df_cleansed, api_key)
     print(df_scored)
 
-#temp
+#temp23
 if __name__ == "__main__":
     url = "https://www.pathe.nl/bioscoop/eindhoven"
     api_key = api_key_doc.api_key
