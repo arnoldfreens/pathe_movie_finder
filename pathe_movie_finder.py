@@ -36,7 +36,7 @@ def clean_movie_names(df):
     return df_unique[['Cleansed Movie Name']]
 
 # Interface with the movie DB API to get a score for the movies
-def get_tmdb_score(movie_name, api_key):
+def get_tmdb_info(movie_name, api_key):
     global data, score, response
     base_url = "https://api.themoviedb.org/3"
     search_url = f"{base_url}/search/movie?api_key={api_key}&query={movie_name}"
@@ -54,32 +54,47 @@ def get_tmdb_score(movie_name, api_key):
         data = response.json()
 
         score = data.get('vote_average')
+        votes = data.get('vote_count')
 
     else:
         score = None
+        votes = None
 
-    return score
+    return score, votes
 
-def print_movies(url, api_key):
+# Function to find and append movie scores
+def find_score(df_cleansed, api_key):
+    # Get movie scores and create a new dataframe with movie names and scores
+    movie_scores = []
+    movie_votes = []
+    for movie_name in df_cleansed['Cleansed Movie Name']:
+        score, votes = get_tmdb_info(movie_name, api_key)
+        movie_scores.append(score)
+        movie_votes.append(votes)
+
+    # Add the scores as a new column to the cleansed DataFrame
+    df_cleansed['Score'] = movie_scores
+    df_cleansed['Score'] = df_cleansed['Score'].round(1)
+    
+    df_cleansed['Votes'] = movie_votes
+    
+    # Add a column for movies with votes above 100
+    df_cleansed['Votes_above_100'] = df_cleansed['Votes'] >= 100
+
+    # Sort the DataFrame by 'Votes_above_100' (False first, then True), then by 'Score' in descending order
+    df_cleansed = df_cleansed.sort_values(['Votes_above_100', 'Score'], ascending=[False, False])
+    
+    return df_cleansed
+
+def main(url):
     html_content = get_html_content(url)
     data = parse_html_for_json_movie(html_content)
     df = extract_movie_names(data)
     df_cleansed = clean_movie_names(df)
-
-    # Get movie scores and create a new dataframe with movie names and scores
-    movie_scores = []
-    for movie_name in df_cleansed['Cleansed Movie Name']:
-        score = get_tmdb_score(movie_name, api_key)
-        movie_scores.append(score)
-    
-    # Add the scores as a new column to the cleansed DataFrame
-    df_cleansed['Score'] = movie_scores
-    df_cleansed['Score'] = df_cleansed['Score'].round(1)
-    # Sort the DataFrame by the 'Score' column in ascending order
-    df_cleansed = df_cleansed.sort_values('Score', ascending=False)
-    print(df_cleansed)
+    df_scored = find_score(df_cleansed, api_key)
+    print(df_scored)
 
 if __name__ == "__main__":
     url = "https://www.pathe.nl/bioscoop/eindhoven"
     api_key = api_key_doc.api_key
-    print_movies(url, api_key)
+    main(url)
