@@ -86,16 +86,21 @@ def find_score(df_cleansed, api_key):
     
     return df_cleansed
 
-def main(url):
-    html_content = get_html_content(url)
-    data = parse_html_for_json_movie(html_content)
-    df = extract_movie_names(data)
-    df_cleansed = clean_movie_names(df)
-    df_scored = find_score(df_cleansed, api_key)
+def main(url, api_key):
+    df_scored = find_score(
+        clean_movie_names(
+            extract_movie_names(
+                parse_html_for_json_movie(
+                    get_html_content(url)
+                )
+            )
+        ),
+        api_key
+    )
     print(df_scored)
-
+    
 #temp23
 if __name__ == "__main__":
     url = "https://www.pathe.nl/bioscoop/eindhoven"
     api_key = api_key_doc.api_key
-    main(url)
+    main(url, api_key)
