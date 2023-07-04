@@ -46,13 +46,11 @@ performed by the `get_tmdb_score` function.
 ## Usage and Results
 
 For the script to work, it needs an API key from TMDb. The API key is expected to be 
-stored in a module named `api_key_doc`, in a variable called `api_key`.
+stored in your enviroment variables, in a variable called `tmdb_api`.
 
 After setting up the API key, you can run the script directly. It will print a DataFrame 
 with all the movies currently playing at Pathé Cinema in Eindhoven and their respective 
 scores from TMDb.
 
-**Note:** Please ensure that you have the necessary permissions to web scrape the data 
-from the desired URL and use the TMDb API, as certain websites and APIs may have 
-restrictions on their use. 
+Change the URL in the code's entry point for different Pathe theaters for local results.
 
