@@ -1,8 +1,12 @@
 # Movie Data Extraction and Rating 
 
 This script extracts data from Pathe and retrieves movie ratings from The Movie Database (TMDb). 
-It's primary purpose is to provide the user with a list of movies currently screening in the theater,  
+Its primary purpose is to provide the user with a list of movies currently screening in the theater,  
 along with their respective scores from TMDb. 
+
+## Example output
+
+![Example Output](./Pictures/example_output.JPG)  S
 
 ## Dependencies
 
