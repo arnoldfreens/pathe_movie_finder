@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import json
 import pandas as pd
 import re
-import api_key_doc
+import os
 
 #First we get the HTML content
 def get_html_content(url):
@@ -99,8 +99,7 @@ def main(url, api_key):
     )
     print(df_scored)
     
-#temp23
 if __name__ == "__main__":
     url = "https://www.pathe.nl/bioscoop/eindhoven"
-    api_key = api_key_doc.api_key
-    main(url, api_key)
+    tmdb_api_key = os.environ.get('tmdb_api')
+    main(url, tmdb_api_key)
