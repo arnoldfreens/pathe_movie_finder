@@ -4,18 +4,7 @@ import json
 import pandas as pd
 import re
 import os
-
-#First we get the HTML content
-def get_html_content(url):
-    response = requests.get(url)
-    return response.text
-
-# Retrieve JSON containing relevant data on movies playing
-def parse_html_for_json_movie(html_content):
-    global json_load
-    soup = BeautifulSoup(html_content, 'html.parser')
-    script_tag = soup.find('script', {'type' : 'application/ld+json'})
-    return json.loads(script_tag.string)
+from pathe_scraper import *
 
 # Extract movie names from Json and output as DF
 def extract_movie_names(data):
@@ -91,7 +80,7 @@ def main(url, api_key):
         clean_movie_names(
             extract_movie_names(
                 parse_html_for_json_movie(
-                    get_html_content(url)
+                    get_theater_html_content(url)
                 )
             )
         ),
